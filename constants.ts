@@ -6,6 +6,7 @@ export const INITIAL_PRODUCTS: Product[] = [
   {
     id: '1',
     name: 'Epson EcoTank L3250',
+    brand: 'Epson',
     category: 'Impressoras',
     price: 249.90,
     stock: 12,
@@ -15,6 +16,7 @@ export const INITIAL_PRODUCTS: Product[] = [
   {
     id: '2',
     name: 'Kit Tinta Epson 664 (CMYK)',
+    brand: 'Epson',
     category: 'Tinteiros',
     price: 39.90,
     stock: 45,
@@ -24,6 +26,7 @@ export const INITIAL_PRODUCTS: Product[] = [
   {
     id: '3',
     name: 'Papel Fotográfico Glossy A4 180g',
+    brand: 'Outras',
     category: 'Papéis',
     price: 12.50,
     stock: 100,
@@ -33,6 +36,7 @@ export const INITIAL_PRODUCTS: Product[] = [
   {
     id: '4',
     name: 'Canon Mega Tank G3110',
+    brand: 'Canon',
     category: 'Impressoras',
     price: 189.00,
     stock: 5,

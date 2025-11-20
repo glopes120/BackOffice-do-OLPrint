@@ -36,9 +36,21 @@ export const Dashboard: React.FC = () => {
           <h2 className="text-2xl font-bold text-slate-900 dark:text-white">Dashboard</h2>
           <p className="text-slate-500 dark:text-slate-400">Visão geral do desempenho da OLPrint.</p>
         </div>
-        <div className="flex items-center gap-2 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 px-4 py-2 rounded-full text-sm font-medium border border-indigo-100 dark:border-indigo-800 max-w-xl">
-          <Sparkles className="w-4 h-4 shrink-0" />
-          <span className="truncate">{insight}</span>
+      </div>
+
+      {/* AI Insight Banner - Full width for better readability */}
+      <div className="bg-indigo-50 dark:bg-indigo-900/20 border border-indigo-100 dark:border-indigo-800/50 rounded-xl p-4 flex items-start gap-4 shadow-sm transition-all">
+        <div className="p-2.5 bg-white dark:bg-indigo-950/50 rounded-lg shadow-sm border border-indigo-100 dark:border-indigo-800/50 shrink-0 text-indigo-600 dark:text-indigo-400">
+          <Sparkles className="w-5 h-5" />
+        </div>
+        <div className="flex-1 py-0.5">
+           <h4 className="text-sm font-bold text-indigo-900 dark:text-indigo-300 mb-1 flex items-center gap-2">
+             Dica Inteligente
+             <span className="px-2 py-0.5 rounded text-[10px] bg-indigo-100 dark:bg-indigo-800 text-indigo-700 dark:text-indigo-300 uppercase tracking-wider font-bold">Gemini AI</span>
+           </h4>
+           <p className="text-sm text-indigo-800 dark:text-indigo-300 leading-relaxed">
+             {insight}
+           </p>
         </div>
       </div>
 

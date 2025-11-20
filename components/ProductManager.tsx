@@ -3,16 +3,19 @@ import React, { useState } from 'react';
 import { Product } from '../types';
 import { INITIAL_PRODUCTS } from '../constants';
 import { generateProductDescription } from '../services/geminiService';
-import { Plus, Search, Edit, Trash2, X, Wand2, Save, Image as ImageIcon, Tags, Check } from 'lucide-react';
+import { Plus, Search, Edit, Trash2, X, Wand2, Save, Image as ImageIcon, Tags, Check, BadgeCheck } from 'lucide-react';
 
 export const ProductManager: React.FC = () => {
   const [products, setProducts] = useState<Product[]>(INITIAL_PRODUCTS);
-  // Initialize categories with printer domain values
+  
+  // Initialize categories and brands with printer domain values
   const [categories, setCategories] = useState<string[]>(['Impressoras', 'Tinteiros', 'Toners', 'Papéis', 'Acessórios']);
+  const [brands, setBrands] = useState<string[]>(['HP', 'Epson', 'Canon', 'Brother', 'Lexmark', 'Xerox', 'Samsung', 'Kyocera', 'Ricoh', 'Outras']);
   
   // Modal States
   const [isProductModalOpen, setIsProductModalOpen] = useState(false);
   const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false);
+  const [isBrandModalOpen, setIsBrandModalOpen] = useState(false);
   
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
@@ -22,8 +25,9 @@ export const ProductManager: React.FC = () => {
   const [isGenerating, setIsGenerating] = useState(false);
   const [keywords, setKeywords] = useState('');
 
-  // Category Management State
+  // Management State
   const [newCategoryName, setNewCategoryName] = useState('');
+  const [newBrandName, setNewBrandName] = useState('');
 
   // Product Handlers
   const handleOpenProductModal = (product?: Product) => {
@@ -33,7 +37,11 @@ export const ProductManager: React.FC = () => {
       setKeywords(''); 
     } else {
       setEditingProduct(null);
-      setFormData({ category: categories[0], imageUrl: 'https://via.placeholder.com/200' });
+      setFormData({ 
+        category: categories[0], 
+        brand: brands[0],
+        imageUrl: 'https://via.placeholder.com/200' 
+      });
       setKeywords('');
     }
     setIsProductModalOpen(true);
@@ -53,6 +61,8 @@ export const ProductManager: React.FC = () => {
       const newProduct: Product = {
         id: Date.now().toString(),
         ...formData as Product,
+        category: formData.category || categories[0],
+        brand: formData.brand || brands[0],
         stock: formData.stock || 0,
         description: formData.description || '',
       };
@@ -74,7 +84,9 @@ export const ProductManager: React.FC = () => {
     }
     setIsGenerating(true);
     try {
-      const desc = await generateProductDescription(formData.name, formData.category, keywords);
+      // We append the brand to the name context for better AI generation
+      const contextName = `${formData.brand} ${formData.name}`;
+      const desc = await generateProductDescription(contextName, formData.category, keywords);
       setFormData(prev => ({ ...prev, description: desc }));
     } catch (error) {
       alert("Erro ao gerar descrição. Verifique a API Key.");
@@ -92,7 +104,6 @@ export const ProductManager: React.FC = () => {
   };
 
   const handleDeleteCategory = (cat: string) => {
-    // Prevent deleting if used
     const isUsed = products.some(p => p.category === cat);
     if (isUsed) {
       alert(`Não é possível excluir "${cat}" pois existem produtos nesta categoria.`);
@@ -101,9 +112,27 @@ export const ProductManager: React.FC = () => {
     setCategories(categories.filter(c => c !== cat));
   };
 
+  // Brand Handlers
+  const handleAddBrand = () => {
+    if (newBrandName && !brands.includes(newBrandName)) {
+      setBrands([...brands, newBrandName]);
+      setNewBrandName('');
+    }
+  };
+
+  const handleDeleteBrand = (brand: string) => {
+    const isUsed = products.some(p => p.brand === brand);
+    if (isUsed) {
+      alert(`Não é possível excluir "${brand}" pois existem produtos desta marca.`);
+      return;
+    }
+    setBrands(brands.filter(b => b !== brand));
+  };
+
   const filteredProducts = products.filter(p => 
     p.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
-    p.category.toLowerCase().includes(searchTerm.toLowerCase())
+    p.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    p.brand.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
@@ -113,7 +142,13 @@ export const ProductManager: React.FC = () => {
           <h2 className="text-2xl font-bold text-slate-900 dark:text-white">Gerenciar Produtos</h2>
           <p className="text-slate-500 dark:text-slate-400">Adicione, edite ou remova produtos do catálogo da OLPrint.</p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
+          <button 
+            onClick={() => setIsBrandModalOpen(true)}
+            className="flex items-center gap-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 px-4 py-2 rounded-lg font-medium transition-colors shadow-sm"
+          >
+            <BadgeCheck className="w-4 h-4" /> Marcas
+          </button>
           <button 
             onClick={() => setIsCategoryModalOpen(true)}
             className="flex items-center gap-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 px-4 py-2 rounded-lg font-medium transition-colors shadow-sm"
@@ -134,7 +169,7 @@ export const ProductManager: React.FC = () => {
         <Search className="w-5 h-5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
         <input 
           type="text" 
-          placeholder="Buscar por nome ou categoria..." 
+          placeholder="Buscar por nome, marca ou categoria..." 
           className="w-full pl-10 pr-4 py-2 border border-slate-200 dark:border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-400"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
@@ -147,6 +182,7 @@ export const ProductManager: React.FC = () => {
           <thead className="bg-slate-50 dark:bg-slate-900 border-b border-slate-200 dark:border-slate-700">
             <tr>
               <th className="px-6 py-3 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Produto</th>
+              <th className="px-6 py-3 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Marca</th>
               <th className="px-6 py-3 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Categoria</th>
               <th className="px-6 py-3 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Preço</th>
               <th className="px-6 py-3 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Estoque</th>
@@ -163,6 +199,9 @@ export const ProductManager: React.FC = () => {
                       <p className="font-medium text-slate-900 dark:text-white">{product.name}</p>
                     </div>
                   </div>
+                </td>
+                <td className="px-6 py-4 text-sm text-slate-600 dark:text-slate-300">
+                  <span className="font-medium">{product.brand}</span>
                 </td>
                 <td className="px-6 py-4 text-sm text-slate-600 dark:text-slate-300">
                   <span className="px-2 py-1 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 text-xs font-medium">
@@ -214,13 +253,16 @@ export const ProductManager: React.FC = () => {
             <div className="p-6 space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Nome do Produto</label>
-                  <input 
-                    type="text" 
+                  <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Marca</label>
+                  <select 
                     className="w-full px-3 py-2 border border-slate-200 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none bg-white dark:bg-slate-900 text-slate-900 dark:text-white"
-                    value={formData.name || ''}
-                    onChange={e => setFormData({...formData, name: e.target.value})}
-                  />
+                    value={formData.brand}
+                    onChange={e => setFormData({...formData, brand: e.target.value})}
+                  >
+                    {brands.map(b => (
+                      <option key={b} value={b}>{b}</option>
+                    ))}
+                  </select>
                 </div>
                 <div className="space-y-2">
                   <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Categoria</label>
@@ -233,6 +275,15 @@ export const ProductManager: React.FC = () => {
                       <option key={cat} value={cat}>{cat}</option>
                     ))}
                   </select>
+                </div>
+                <div className="col-span-1 md:col-span-2 space-y-2">
+                  <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Nome do Produto</label>
+                  <input 
+                    type="text" 
+                    className="w-full px-3 py-2 border border-slate-200 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none bg-white dark:bg-slate-900 text-slate-900 dark:text-white"
+                    value={formData.name || ''}
+                    onChange={e => setFormData({...formData, name: e.target.value})}
+                  />
                 </div>
                 <div className="space-y-2">
                   <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Preço (€)</label>
@@ -363,6 +414,54 @@ export const ProductManager: React.FC = () => {
                         onClick={() => handleDeleteCategory(cat)}
                         className="text-slate-400 hover:text-red-600 dark:hover:text-red-400 transition-colors opacity-0 group-hover:opacity-100"
                         title="Remover Categoria"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+         </div>
+      )}
+
+      {/* Brand Modal */}
+      {isBrandModalOpen && (
+         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+            <div className="bg-white dark:bg-slate-800 rounded-xl shadow-xl w-full max-w-md overflow-hidden border border-slate-200 dark:border-slate-700">
+              <div className="p-4 border-b border-slate-100 dark:border-slate-700 flex justify-between items-center">
+                <h3 className="text-lg font-bold text-slate-900 dark:text-white">Gerenciar Marcas</h3>
+                <button onClick={() => setIsBrandModalOpen(false)} className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-300">
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              <div className="p-4 space-y-4">
+                <div className="flex gap-2">
+                  <input 
+                    type="text" 
+                    placeholder="Nova marca..."
+                    className="flex-1 px-3 py-2 border border-slate-200 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none bg-white dark:bg-slate-900 text-slate-900 dark:text-white"
+                    value={newBrandName}
+                    onChange={(e) => setNewBrandName(e.target.value)}
+                    onKeyDown={(e) => e.key === 'Enter' && handleAddBrand()}
+                  />
+                  <button 
+                    onClick={handleAddBrand}
+                    className="bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-2 rounded-lg"
+                  >
+                    <Plus className="w-5 h-5" />
+                  </button>
+                </div>
+
+                <div className="max-h-60 overflow-y-auto space-y-2">
+                  {brands.map((brand) => (
+                    <div key={brand} className="flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-700/50 rounded-lg group">
+                      <span className="text-slate-700 dark:text-slate-200 font-medium">{brand}</span>
+                      <button 
+                        onClick={() => handleDeleteBrand(brand)}
+                        className="text-slate-400 hover:text-red-600 dark:hover:text-red-400 transition-colors opacity-0 group-hover:opacity-100"
+                        title="Remover Marca"
                       >
                         <Trash2 className="w-4 h-4" />
                       </button>
