@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { RECENT_ORDERS } from '../constants';
 import { Order } from '../types';
-import { Eye, Trash2, X, CheckCircle, Clock, Truck, Package, AlertCircle, ChevronDown } from 'lucide-react';
+import { Eye, Trash2, X, CheckCircle, Clock, Truck, Package, AlertCircle, ChevronDown, Filter, Calendar } from 'lucide-react';
 
 const STATUS_OPTIONS = [
   'Pendente',
@@ -16,6 +16,9 @@ export const OrderList: React.FC = () => {
   const [orders, setOrders] = useState<Order[]>(RECENT_ORDERS);
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [filterStatus, setFilterStatus] = useState<string>('Todos');
+  const [startDate, setStartDate] = useState<string>('');
+  const [endDate, setEndDate] = useState<string>('');
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -54,11 +57,60 @@ export const OrderList: React.FC = () => {
     }
   };
 
+  const filteredOrders = orders.filter(order => {
+    const matchesStatus = filterStatus === 'Todos' || order.status === filterStatus;
+    const matchesStart = startDate ? order.date >= startDate : true;
+    const matchesEnd = endDate ? order.date <= endDate : true;
+    return matchesStatus && matchesStart && matchesEnd;
+  });
+
   return (
     <div className="space-y-6">
-      <div>
-        <h2 className="text-2xl font-bold text-slate-900 dark:text-white">Pedidos</h2>
-        <p className="text-slate-500 dark:text-slate-400">Gerencie e acompanhe o status dos pedidos.</p>
+      <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-4">
+        <div>
+          <h2 className="text-2xl font-bold text-slate-900 dark:text-white">Pedidos</h2>
+          <p className="text-slate-500 dark:text-slate-400">Gerencie e acompanhe o status dos pedidos.</p>
+        </div>
+
+        <div className="flex flex-col sm:flex-row gap-3">
+            {/* Date Filter */}
+            <div className="flex items-center bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-1 shadow-sm">
+                <div className="px-2 text-slate-400 border-r border-slate-100 dark:border-slate-700">
+                    <Calendar className="w-4 h-4" />
+                </div>
+                <input 
+                    type="date" 
+                    value={startDate}
+                    onChange={(e) => setStartDate(e.target.value)}
+                    className="bg-transparent border-none text-slate-600 dark:text-slate-300 text-sm px-2 py-1.5 focus:ring-0 outline-none w-32"
+                    placeholder="Início"
+                />
+                <span className="text-slate-300 dark:text-slate-600">-</span>
+                <input 
+                    type="date" 
+                    value={endDate}
+                    onChange={(e) => setEndDate(e.target.value)}
+                    className="bg-transparent border-none text-slate-600 dark:text-slate-300 text-sm px-2 py-1.5 focus:ring-0 outline-none w-32"
+                    placeholder="Fim"
+                />
+            </div>
+
+            {/* Status Filter */}
+            <div className="relative">
+                <Filter className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                <select
+                    value={filterStatus}
+                    onChange={(e) => setFilterStatus(e.target.value)}
+                    className="w-full sm:w-auto appearance-none bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 py-2 pl-10 pr-10 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none cursor-pointer shadow-sm h-[42px]"
+                >
+                    <option value="Todos">Todos os Status</option>
+                    {STATUS_OPTIONS.map(status => (
+                        <option key={status} value={status}>{status}</option>
+                    ))}
+                </select>
+                <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
+            </div>
+        </div>
       </div>
 
       <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 overflow-hidden">
@@ -75,7 +127,7 @@ export const OrderList: React.FC = () => {
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-200 dark:divide-slate-700">
-            {orders.map((order) => (
+            {filteredOrders.map((order) => (
               <tr key={order.id} className="hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors">
                 <td className="px-6 py-4 text-sm font-medium text-indigo-600 dark:text-indigo-400">
                   #{order.id}
@@ -117,10 +169,10 @@ export const OrderList: React.FC = () => {
                 </td>
               </tr>
             ))}
-            {orders.length === 0 && (
+            {filteredOrders.length === 0 && (
               <tr>
                 <td colSpan={7} className="px-6 py-12 text-center text-slate-500 dark:text-slate-400">
-                  Nenhum pedido encontrado.
+                  Nenhum pedido encontrado para os filtros selecionados.
                 </td>
               </tr>
             )}

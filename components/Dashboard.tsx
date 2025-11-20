@@ -1,7 +1,8 @@
 
 import React, { useEffect, useState } from 'react';
-import { DASHBOARD_STATS } from '../constants';
+import { DASHBOARD_STATS, RECENT_ORDERS, INITIAL_PRODUCTS } from '../constants';
 import { generateBusinessInsight } from '../services/geminiService';
+import { generatePDFReport } from '../services/reportService';
 import { Sparkles, ArrowRight } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line } from 'recharts';
 
@@ -28,6 +29,10 @@ export const Dashboard: React.FC = () => {
     fetchInsight();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const handleExportPDF = () => {
+    generatePDFReport(RECENT_ORDERS, INITIAL_PRODUCTS, DASHBOARD_STATS);
+  };
 
   return (
     <div className="space-y-6">
@@ -108,7 +113,10 @@ export const Dashboard: React.FC = () => {
             </ResponsiveContainer>
           </div>
           <div className="space-y-4">
-             <div className="flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-700/50 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors cursor-pointer group">
+             <div 
+               onClick={handleExportPDF}
+               className="flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-700/50 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors cursor-pointer group"
+             >
                 <div>
                   <p className="text-sm font-medium text-slate-900 dark:text-white">Ver relatórios completos</p>
                   <p className="text-xs text-slate-500 dark:text-slate-400">Exportar PDF/CSV</p>
