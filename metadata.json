@@ -1,0 +1,5 @@
+{
+  "name": "OLPrint Admin",
+  "description": "A professional backoffice dashboard for OLPrint to manage products, orders, and generate AI-powered content.",
+  "requestFramePermissions": []
+}
