@@ -16,11 +16,11 @@ export const generatePDFReport = (orders: Order[], products: Product[], stats: a
   
   doc.setFontSize(12);
   doc.setTextColor(100);
-  doc.text('Relatório Gerencial & Vendas', 14, 28);
+  doc.text('Relatório de Gestão & Vendas', 14, 28);
   
   doc.setFontSize(10);
   doc.setTextColor(150);
-  doc.text(`Gerado em: ${new Date().toLocaleDateString('pt-BR')} às ${new Date().toLocaleTimeString('pt-BR')}`, 14, 35);
+  doc.text(`Gerado em: ${new Date().toLocaleDateString('pt-PT')} às ${new Date().toLocaleTimeString('pt-PT')}`, 14, 35);
   
   doc.setDrawColor(200);
   doc.line(14, 40, 196, 40);
@@ -52,11 +52,11 @@ export const generatePDFReport = (orders: Order[], products: Product[], stats: a
   
   autoTable(doc, {
     startY: yPos + 15,
-    head: [['ID', 'Cliente', 'Data', 'Status', 'Items', 'Total']],
+    head: [['ID', 'Cliente', 'Data', 'Status', 'Itens', 'Total']],
     body: orders.map(order => [
       order.id, 
       order.customerName, 
-      new Date(order.date).toLocaleDateString('pt-BR'), 
+      new Date(order.date).toLocaleDateString('pt-PT'), 
       order.status,
       order.items.toString(),
       `€ ${order.total.toFixed(2)}`
@@ -72,9 +72,9 @@ export const generatePDFReport = (orders: Order[], products: Product[], stats: a
   // Verificar se há espaço suficiente, senão nova página
   if (finalY > 240) {
       doc.addPage();
-      doc.text('Produtos com Estoque Baixo (< 10 un)', 14, 20);
+      doc.text('Produtos com Stock Baixo (< 10 un)', 14, 20);
   } else {
-      doc.text('Produtos com Estoque Baixo (< 10 un)', 14, finalY + 15);
+      doc.text('Produtos com Stock Baixo (< 10 un)', 14, finalY + 15);
   }
 
   const lowStock = products.filter(p => p.stock < 10);
@@ -82,7 +82,7 @@ export const generatePDFReport = (orders: Order[], products: Product[], stats: a
 
   autoTable(doc, {
     startY: startYProducts,
-    head: [['Produto', 'Marca', 'Categoria', 'Estoque', 'Preço']],
+    head: [['Produto', 'Marca', 'Categoria', 'Stock', 'Preço']],
     body: lowStock.map(p => [
       p.name,
       p.brand,

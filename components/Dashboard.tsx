@@ -17,12 +17,12 @@ const data = [
 ];
 
 export const Dashboard: React.FC = () => {
-  const [insight, setInsight] = useState<string>('Analisando dados com Gemini...');
+  const [insight, setInsight] = useState<string>('A analisar dados com Gemini...');
 
   useEffect(() => {
     const fetchInsight = async () => {
       // Simulate checking cache or avoiding excessive calls
-      const summary = "Vendas altas de multifuncionais no fim de semana. Estoque de tinta preta 664 baixo.";
+      const summary = "Vendas altas de multifuncionais no fim de semana. Stock de tinta preta 664 baixo.";
       const result = await generateBusinessInsight(summary);
       setInsight(result);
     };
@@ -125,7 +125,7 @@ export const Dashboard: React.FC = () => {
              </div>
              <div className="flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-700/50 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors cursor-pointer group">
                 <div>
-                  <p className="text-sm font-medium text-slate-900 dark:text-white">Configurar metas</p>
+                  <p className="text-sm font-medium text-slate-900 dark:text-white">Configurar objetivos</p>
                   <p className="text-xs text-slate-500 dark:text-slate-400">Ajustar KPIs</p>
                 </div>
                 <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors" />

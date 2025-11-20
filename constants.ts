@@ -57,7 +57,7 @@ export const DASHBOARD_STATS = [
   { label: 'Receita Total', value: '€ 28.500', icon: TrendingUp, change: '+12%', color: 'text-emerald-600' },
   { label: 'Pedidos Ativos', value: '45', icon: ShoppingCart, change: '+5%', color: 'text-blue-600' },
   { label: 'Novos Clientes', value: '120', icon: Users, change: '+18%', color: 'text-purple-600' },
-  { label: 'Estoque Crítico', value: '3', icon: Package, change: '-2', color: 'text-orange-600' },
+  { label: 'Stock Crítico', value: '3', icon: Package, change: '-2', color: 'text-orange-600' },
 ];
 
 export const MENU_ITEMS = [

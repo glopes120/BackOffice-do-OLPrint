@@ -12,7 +12,7 @@ export const Settings: React.FC<SettingsProps> = ({ isDarkMode, toggleTheme }) =
     <div className="space-y-6 max-w-4xl">
       <div>
         <h2 className="text-2xl font-bold text-slate-900 dark:text-white">Configurações</h2>
-        <p className="text-slate-500 dark:text-slate-400">Gerencie as preferências do sistema e aparência.</p>
+        <p className="text-slate-500 dark:text-slate-400">Gira as preferências do sistema e aparência.</p>
       </div>
 
       <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 overflow-hidden">

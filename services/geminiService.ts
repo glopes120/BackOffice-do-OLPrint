@@ -1,3 +1,4 @@
+
 import { GoogleGenAI } from "@google/genai";
 
 const apiKey = process.env.API_KEY;
@@ -11,8 +12,8 @@ export const generateProductDescription = async (productName: string, category: 
 
   try {
     const prompt = `
-      Você é um especialista em marketing para uma gráfica chamada OLPrint.
-      Escreva uma descrição de produto curta, persuasiva e profissional para venda no site.
+      És um especialista em marketing para uma gráfica chamada OLPrint em Portugal.
+      Escreve uma descrição de produto curta, persuasiva e profissional para venda no site, utilizando Português de Portugal.
       
       Produto: ${productName}
       Categoria: ${category}
@@ -38,7 +39,7 @@ export const generateBusinessInsight = async (dataSummary: string): Promise<stri
 
   try {
     const prompt = `
-      Analise este resumo de dados de vendas da OLPrint e dê uma dica estratégica curta (max 1 frase) para o dono da gráfica melhorar as vendas hoje.
+      Analisa este resumo de dados de vendas da OLPrint e dá uma dica estratégica curta (max 1 frase) para o dono da gráfica melhorar as vendas hoje. Responde em Português de Portugal.
       Dados: ${dataSummary}
     `;
     

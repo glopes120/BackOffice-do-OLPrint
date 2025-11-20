@@ -49,7 +49,7 @@ export const OrderList: React.FC = () => {
   };
 
   const handleDeleteOrder = (orderId: string) => {
-    if (confirm('Tem certeza que deseja excluir este pedido? Esta ação não pode ser desfeita.')) {
+    if (confirm('Tem a certeza que deseja eliminar este pedido? Esta ação não pode ser desfeita.')) {
       setOrders(orders.filter(o => o.id !== orderId));
       if (selectedOrder?.id === orderId) {
         handleCloseModal();
@@ -69,7 +69,7 @@ export const OrderList: React.FC = () => {
       <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-4">
         <div>
           <h2 className="text-2xl font-bold text-slate-900 dark:text-white">Pedidos</h2>
-          <p className="text-slate-500 dark:text-slate-400">Gerencie e acompanhe o status dos pedidos.</p>
+          <p className="text-slate-500 dark:text-slate-400">Gira e acompanhe o status dos pedidos.</p>
         </div>
 
         <div className="flex flex-col sm:flex-row gap-3">
@@ -120,7 +120,7 @@ export const OrderList: React.FC = () => {
               <th className="px-6 py-3 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">ID</th>
               <th className="px-6 py-3 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Cliente</th>
               <th className="px-6 py-3 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Data</th>
-              <th className="px-6 py-3 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Items</th>
+              <th className="px-6 py-3 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Itens</th>
               <th className="px-6 py-3 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Status</th>
               <th className="px-6 py-3 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Total</th>
               <th className="px-6 py-3 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-right">Ações</th>
@@ -136,7 +136,7 @@ export const OrderList: React.FC = () => {
                   {order.customerName}
                 </td>
                 <td className="px-6 py-4 text-sm text-slate-500 dark:text-slate-400">
-                  {new Date(order.date).toLocaleDateString('pt-BR')}
+                  {new Date(order.date).toLocaleDateString('pt-PT')}
                 </td>
                  <td className="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">
                   {order.items}
@@ -161,7 +161,7 @@ export const OrderList: React.FC = () => {
                     <button 
                       onClick={() => handleDeleteOrder(order.id)}
                       className="p-2 hover:bg-red-50 dark:hover:bg-red-900/30 text-slate-400 hover:text-red-600 dark:hover:text-red-400 rounded-lg transition-colors"
-                      title="Excluir Pedido"
+                      title="Eliminar Pedido"
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>
@@ -193,7 +193,7 @@ export const OrderList: React.FC = () => {
                   </span>
                 </h3>
                 <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
-                  Realizado em {new Date(selectedOrder.date).toLocaleDateString('pt-BR', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+                  Realizado em {new Date(selectedOrder.date).toLocaleDateString('pt-PT', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
                 </p>
               </div>
               <button onClick={handleCloseModal} className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-colors">
@@ -274,7 +274,7 @@ export const OrderList: React.FC = () => {
                 onClick={() => handleDeleteOrder(selectedOrder.id)}
                 className="flex items-center gap-2 text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 font-medium transition-colors text-sm"
               >
-                <Trash2 className="w-4 h-4" /> Excluir Pedido
+                <Trash2 className="w-4 h-4" /> Eliminar Pedido
               </button>
               <button 
                 onClick={handleCloseModal}

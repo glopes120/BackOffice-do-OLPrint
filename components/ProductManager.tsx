@@ -72,7 +72,7 @@ export const ProductManager: React.FC = () => {
   };
 
   const handleDeleteProduct = (id: string) => {
-    if (window.confirm('Tem certeza que deseja excluir este produto?')) {
+    if (window.confirm('Tem a certeza que deseja eliminar este produto?')) {
       setProducts(products.filter(p => p.id !== id));
     }
   };
@@ -106,7 +106,7 @@ export const ProductManager: React.FC = () => {
   const handleDeleteCategory = (cat: string) => {
     const isUsed = products.some(p => p.category === cat);
     if (isUsed) {
-      alert(`Não é possível excluir "${cat}" pois existem produtos nesta categoria.`);
+      alert(`Não é possível eliminar "${cat}" pois existem produtos nesta categoria.`);
       return;
     }
     setCategories(categories.filter(c => c !== cat));
@@ -123,7 +123,7 @@ export const ProductManager: React.FC = () => {
   const handleDeleteBrand = (brand: string) => {
     const isUsed = products.some(p => p.brand === brand);
     if (isUsed) {
-      alert(`Não é possível excluir "${brand}" pois existem produtos desta marca.`);
+      alert(`Não é possível eliminar "${brand}" pois existem produtos desta marca.`);
       return;
     }
     setBrands(brands.filter(b => b !== brand));
@@ -139,7 +139,7 @@ export const ProductManager: React.FC = () => {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h2 className="text-2xl font-bold text-slate-900 dark:text-white">Gerenciar Produtos</h2>
+          <h2 className="text-2xl font-bold text-slate-900 dark:text-white">Gerir Produtos</h2>
           <p className="text-slate-500 dark:text-slate-400">Adicione, edite ou remova produtos do catálogo da OLPrint.</p>
         </div>
         <div className="flex flex-wrap gap-2">
@@ -169,7 +169,7 @@ export const ProductManager: React.FC = () => {
         <Search className="w-5 h-5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
         <input 
           type="text" 
-          placeholder="Buscar por nome, marca ou categoria..." 
+          placeholder="Pesquisar por nome, marca ou categoria..." 
           className="w-full pl-10 pr-4 py-2 border border-slate-200 dark:border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-400"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
@@ -185,7 +185,7 @@ export const ProductManager: React.FC = () => {
               <th className="px-6 py-3 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Marca</th>
               <th className="px-6 py-3 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Categoria</th>
               <th className="px-6 py-3 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Preço</th>
-              <th className="px-6 py-3 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Estoque</th>
+              <th className="px-6 py-3 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Stock</th>
               <th className="px-6 py-3 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-right">Ações</th>
             </tr>
           </thead>
@@ -296,7 +296,7 @@ export const ProductManager: React.FC = () => {
                   />
                 </div>
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Estoque</label>
+                  <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Stock</label>
                   <input 
                     type="number" 
                     className="w-full px-3 py-2 border border-slate-200 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none bg-white dark:bg-slate-900 text-slate-900 dark:text-white"
@@ -318,7 +318,7 @@ export const ProductManager: React.FC = () => {
                 <div className="flex gap-2">
                   <input 
                     type="text" 
-                    placeholder="Palavras-chave (ex: econômica, alto rendimento)..."
+                    placeholder="Palavras-chave (ex: económica, alto rendimento)..."
                     className="flex-1 px-3 py-2 border border-slate-200 dark:border-slate-700 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 outline-none bg-white dark:bg-slate-800 text-slate-900 dark:text-white"
                     value={keywords}
                     onChange={e => setKeywords(e.target.value)}
@@ -328,7 +328,7 @@ export const ProductManager: React.FC = () => {
                     disabled={isGenerating}
                     className="bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-300 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors whitespace-nowrap"
                   >
-                    {isGenerating ? 'Gerando...' : 'Gerar Descrição'}
+                    {isGenerating ? 'A gerar...' : 'Gerar Descrição'}
                   </button>
                 </div>
               </div>
@@ -370,7 +370,7 @@ export const ProductManager: React.FC = () => {
                 Cancelar
               </button>
               <button onClick={handleSaveProduct} className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-medium transition-colors flex items-center gap-2">
-                <Save className="w-4 h-4" /> Salvar Produto
+                <Save className="w-4 h-4" /> Guardar Produto
               </button>
             </div>
           </div>
@@ -382,7 +382,7 @@ export const ProductManager: React.FC = () => {
          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
             <div className="bg-white dark:bg-slate-800 rounded-xl shadow-xl w-full max-w-md overflow-hidden border border-slate-200 dark:border-slate-700">
               <div className="p-4 border-b border-slate-100 dark:border-slate-700 flex justify-between items-center">
-                <h3 className="text-lg font-bold text-slate-900 dark:text-white">Gerenciar Categorias</h3>
+                <h3 className="text-lg font-bold text-slate-900 dark:text-white">Gerir Categorias</h3>
                 <button onClick={() => setIsCategoryModalOpen(false)} className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-300">
                   <X className="w-5 h-5" />
                 </button>
@@ -430,7 +430,7 @@ export const ProductManager: React.FC = () => {
          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
             <div className="bg-white dark:bg-slate-800 rounded-xl shadow-xl w-full max-w-md overflow-hidden border border-slate-200 dark:border-slate-700">
               <div className="p-4 border-b border-slate-100 dark:border-slate-700 flex justify-between items-center">
-                <h3 className="text-lg font-bold text-slate-900 dark:text-white">Gerenciar Marcas</h3>
+                <h3 className="text-lg font-bold text-slate-900 dark:text-white">Gerir Marcas</h3>
                 <button onClick={() => setIsBrandModalOpen(false)} className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-300">
                   <X className="w-5 h-5" />
                 </button>
